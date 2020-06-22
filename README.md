@@ -2,4 +2,4 @@
 
 Open offline Pomodoro timer.
 
-Try it [here]("https://msnsctt.github.io/Tomate").
+Try it <a href="https://msnsctt.github.io/Tomate">here</a>.
