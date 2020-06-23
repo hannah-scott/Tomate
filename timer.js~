@@ -1,21 +1,17 @@
 class Timer {
-    constructor(row, mins, secs, addTally) {
-        this.tally;
-
+    constructor(row) {
         this.row = row;
         this.id = row.getAttribute("id");
+        this.minutes = row.getElementsByClassName("minutes")[0]
+            .innerHTML;
+        this.seconds = row.getElementsByClassName("seconds")[0]
+            .innerHTML;
         this.button = row.getElementsByClassName("go")[0];
-
-        this.minutes = mins
-        this.seconds = secs;
-        this.resetMins = mins;
-        this.resetSecs = secs;
-
         this.going = false;
         this.interval = null;
         this.done = 0;
-        this.addTally = addTally;
-
+        this.tally = document.getElementById("tally");
+        
         // Update document elements
         this.updateTime();
         
@@ -42,30 +38,21 @@ class Timer {
             this.done += 1;
             this.going = false;
             this.button.removeAttribute("disabled");
-            this.minutes = this.resetMins;
-            this.seconds = this.resetSecs;
+            this.minutes = 25;
+            this.seconds = 0;
             this.updateTime();
             this.updateTally();
-            
-            anyTimerRunning = false;
         }
     }
 
     updateTally() {
-        if (this.addTally == true){
-            this.tally = document.getElementById("tally");
-            this.rowNum = this.done - 1;
-            if ((this.rowNum) % 4 == 0) {;
-                doneContainer = document.createElement('div');
-                doneContainer.setAttribute('class', 'doneContainer')
-                this.tally.appendChild(doneContainer);
-            }
-            
-            doneBlock = document.createElement('div');
-            doneBlock.setAttribute('class', 'doneBlock');
-            
-            this.tally.children[Math.floor(this.rowNum / 4)].appendChild(doneBlock);
+        this.rowNum = this.done - 1;
+        if ((this.rowNum) % 4 == 0) {
+            console.log(Math.floor(this.rowNum / 4));
+            this.tally.insertRow(this.rowNum / 4);
         }
+        console.log(Math.floor(this.rowNum / 4));
+        this.tally.children[Math.floor(this.rowNum / 4)].innerHTML += "| ";
     }
     
     updateTime() {
@@ -88,13 +75,7 @@ class Timer {
     }
 }   
     
-var doneContainer;
-var doneBlock;
-
-var anyTimerRunning = false;
-
-var work = new Timer(document.getElementById("work"), 25, 0, true);
-var brk = new Timer(document.getElementById("brk"), 5, 0, false);
+var work = new Timer(document.getElementById("work"));
 
 function padShortNum(x) {
     if (x < 10) {
@@ -105,14 +86,9 @@ function padShortNum(x) {
 }
 
 function startTimer(o) {
-    if (anyTimerRunning == false){
-        anyTimerRunning = true;
-        
-        o.going = true;
-        o.button.setAttribute("disabled", true);
-        o.interval = setInterval (
-            function() {o.runTimer() }, 1000
-        );
-    }
-    
+    o.going = true;
+    o.button.setAttribute("disabled", true);
+    o.interval = setInterval (
+        function() {o.runTimer() }, 1000
+    );
 }
